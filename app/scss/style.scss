@@ -65,8 +65,9 @@
 .top-slider {
 	background-image: url('../images/decor/top-slider-bg.png');
 	background-repeat: no-repeat;
-	background-size: 90%;
+	background-size: auto 580px;
 	background-color: $bg;
+	background-position: center center;
 	padding: 65px 0 45px;
 	&__container {
 		max-width: 1560px;
@@ -166,8 +167,11 @@
 	}
 	&::after {
 		background-image: url(../images/decor/info-after-bg.svg);
-		bottom: -23px;
-		right: -23px;
+		background-repeat: no-repeat;
+		background-size: cover; /* или `cover`, если нужно растянуть изображение */
+		background-position: center;
+		bottom: -40px;
+		right: -55px;
 		width: 120px;
 		height: 121px;
 		z-index: -1;
@@ -244,6 +248,49 @@
 		color: $title;
 		@extend %roboto-400;
 		transition: all 0.2s;
+	}
+}
+
+.video-fashion {
+	background-color: $bg;
+	background-image: url('../images/decor/pattern.svg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: top center;
+	padding: 125px 0;
+	&__inner {
+		display: flex;
+	}
+	&__popup {
+		margin-right: 60px;
+		max-width: 530px;
+		width: 100%;
+		height: 480px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
+	}
+	&__content {
+		max-width: 570px;
+	}
+	&__subtitle {
+		padding-top: 75px;
+		font-size: 22px;
+		color: $accent;
+		text-transform: uppercase;
+		margin-bottom: 5px;
+	}
+	&__title {
+		text-align: left;
+	}
+	&__text {
+		margin-bottom: 55px;
+	}
+	&__link {
+		@extend %btn;
 	}
 }
 
