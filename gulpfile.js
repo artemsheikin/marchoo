@@ -5,6 +5,8 @@ const postcss = require('gulp-postcss')
 const autoprefixer = require('autoprefixer') // Используем autoprefixer напрямую с postcss
 const uglify = require('gulp-uglify') // Подключаем gulp-uglify
 const imagemin = require('gulp-imagemin')
+const rename = require('gulp-rename')
+const nunjucksRender = require('gulp-nunjucks-render')
 const imageminMozjpeg = require('imagemin-mozjpeg')
 const del = require('del')
 const browserSync = require('browser-sync').create()
@@ -18,20 +20,34 @@ function browsersync() {
 	})
 }
 
-function styles() {
-	return src('app/scss/style.scss') // Убедитесь, что путь правильный
-		.pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError)) // Указываем стиль и обработку ошибок
-		.pipe(concat('style.min.css'))
-		.pipe(
-			postcss([
-				autoprefixer({
-					overrideBrowserslist: ['last 10 versions'],
-					grid: true,
-				}),
-			])
-		) // Применяем autoprefixer с помощью postcss
-		.pipe(dest('app/css'))
+function nunjucks() {
+	return src('app/*.njk')
+		.pipe(nunjucksRender())
+		.pipe(dest('app'))
 		.pipe(browserSync.stream())
+}
+
+function styles() {
+	return (
+		src('app/scss/*.scss') // Убедитесь, что путь правильный
+			.pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError)) // Указываем стиль и обработку ошибок
+			/* .pipe(concat()) */
+			.pipe(
+				rename({
+					suffix: '.min',
+				})
+			)
+			.pipe(
+				postcss([
+					autoprefixer({
+						overrideBrowserslist: ['last 10 versions'],
+						grid: true,
+					}),
+				])
+			) // Применяем autoprefixer с помощью postcss
+			.pipe(dest('app/css'))
+			.pipe(browserSync.stream())
+	)
 }
 
 function cleanDist() {
@@ -39,7 +55,8 @@ function cleanDist() {
 }
 
 function watching() {
-	watch(['app/scss/**/*.scss'], styles)
+	watch(['app/**/*.scss'], styles)
+	watch(['app/*.njk'], nunjucks)
 	watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts)
 	watch(['app/**/*.html']).on('change', browserSync.reload)
 }
@@ -96,6 +113,7 @@ exports.browsersync = browsersync
 exports.watching = watching
 exports.build = series(cleanDist, images, build)
 exports.images = images
+exports.nunjucks = nunjucks
 exports.cleanDist = cleanDist
 
-exports.default = parallel(styles, scripts, browsersync, watching)
+exports.default = parallel(nunjucks, styles, scripts, browsersync, watching)
