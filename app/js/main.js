@@ -1,4 +1,17 @@
 $(function () {
+	$('.menu__btn').on('click', function () {
+		$('.menu__list').toggleClass('menu__list--active')
+	})
+
+	$('.shop__filter-btn').on('click', function () {
+		$('.shop__filters').slideToggle()
+	})
+
+	$('.footer-top__title').on('click', function () {
+		$(this).next().slideToggle()
+		$(this).toggleClass('active')
+	})
+	/* доделать функционар стрелки и решить баг с декстоп,в видео в конце обьясняет если что  */
 	$('.blog-page__slider').slick({
 		prevArrow:
 			'<button type="button" class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" width="11px" height="18px" viewBox="0 0 7 11" version="1.1"><g><path d="M 0.90625 5.015625 C 0.632812 5.28125 0.632812 5.71875 0.90625 5.988281 L 4.40625 9.425781 C 4.679688 9.695312 5.125 9.695312 5.398438 9.425781 C 5.671875 9.15625 5.671875 8.71875 5.398438 8.453125 L 2.390625 5.5 L 5.394531 2.546875 C 5.667969 2.28125 5.667969 1.84375 5.394531 1.574219 C 5.121094 1.304688 4.675781 1.304688 4.402344 1.574219 L 0.902344 5.011719 Z M 0.90625 5.015625 "/></g></svg></button>',
@@ -35,6 +48,14 @@ $(function () {
 		draggable: false,
 		arrows: false,
 		fade: true,
+		responsive: [
+			{
+				breakpoint: 1051,
+				settings: {
+					draggable: true,
+				},
+			},
+		],
 	})
 
 	$('.shop-content__filter-btn').on('click', function () {
@@ -46,9 +67,11 @@ $(function () {
 
 	$('.button-list').on('click', function () {
 		$('.product-item').addClass('product-item--list')
+		$('.shop-content__inner').addClass('shop-content__nogrid')
 	})
 	$('.button-grid').on('click', function () {
 		$('.product-item').removeClass('product-item--list')
+		$('.shop-content__inner').removeClass('shop-content__nogrid')
 	})
 
 	$('.select-style,.product-one__item-num').styler()
